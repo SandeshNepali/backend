@@ -13,10 +13,9 @@ class RideListCreate(APIView):
 
     def get(self, request):
 
-        return Response({})
-        # rides = Ride.objects.all()
-        # serializer = RideSerializer(rides, many=True)
-        # return Response(serializer.data)
+        rides = Ride.objects.all()
+        serializer = RideSerializer(rides, many=True)
+        return Response(serializer.data)
 
 
 
