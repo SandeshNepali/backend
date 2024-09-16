@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Ride Page</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f4f8, #c9d6e3);
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background: #3a7bd5; /* Gradient background color */
+            color: #fff;
+            padding: 60px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #3a7bd5, #00d2d3);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 700;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .feature-cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            flex: 1;
+            min-width: 280px;
+            max-width: 300px;
+            text-align: center;
+        }
+        .card h3 {
+            color: #333;
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .card p {
+            color: #666;
+            font-size: 1em;
+        }
+        .highlight {
+            color: #ff6600;
+            font-weight: bold;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .contact-link {
+            color: #00d2d3;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Ride Page!</h1>
+    </header>
+    <div class="container">
+        <div>
+            <h2>Your Seamless Ride Experience Awaits</h2>
+            <p>We are thrilled to welcome you to our platform. Whether you need a quick ride across town or a longer journey, we offer a range of services tailored to your needs.</p>
+        </div>
+        <div class="feature-cards">
+            <div class="card">
+                <h3>Explore Options</h3>
+                <p>Discover various ride options and pricing that fit your needs.</p>
+            </div>
+            <div class="card">
+                <h3>Book Easily</h3>
+                <p>Book rides effortlessly with just a few clicks.</p>
+            </div>
+            <div class="card">
+                <h3>Manage Bookings</h3>
+                <p>Track your ride status and manage your bookings seamlessly. <span class="highlight">In progress</span>.</p>
+            </div>
+        </div>
+        <p>If you need assistance or have questions, feel free to <a href="mailto:snepali@ucdavis.edu" class="contact-link">reach out to our support team</a>. Enjoy your ride!</p>
+    </div>
+    <footer>
+        &copy; 2024 Ride Application. All rights reserved.
+    </footer>
+</body>
+</html>
