@@ -96,12 +96,11 @@ DATABASES = {
 }
 
 REST_FRAMEWORK = {
-    # Uncomment this if you want to enforce authentication globally
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",  # Ensures that all views require authentication by default
+        "rest_framework.permissions.IsAuthenticated", 
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",  # Uses JWT for authentication
+        "rest_framework_simplejwt.authentication.JWTAuthentication",  
     ),
 }
 
