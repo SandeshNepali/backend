@@ -19,6 +19,7 @@ class RideSerializer(serializers.ModelSerializer):
             "start_longitude",
             "end_latitude",
             "end_longitude",
+            "rider_username",
         ]
 
     def get_passengers(self, obj):

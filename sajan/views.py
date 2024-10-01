@@ -11,7 +11,7 @@ class GetRides(APIView):
 
     def get(self, request):
         now = timezone.now()
-        rides = Ride.objects.filter(departure_time__gt=now)
+        rides = Ride.objects.filter(departure_time__gt=now, status="PENDING")
         serializer = RideSerializer(rides, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -85,11 +85,11 @@ class CancelRideView(APIView):
                 return Response({"status": "Ride canceled"}, status=status.HTTP_200_OK)
             return Response(
                 {"error": "You are not authorized to cancel this ride"},
-                status=status.HTTP_403_FORBIDDEN,
+                status=status.HTTP_202_ACCEPTED,
             )
         except Ride.DoesNotExist:
             return Response(
-                {"error": "Ride not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "Ride not found"}, status=status.HTTP_202_ACCEPTED
             )
 
 
@@ -114,6 +114,7 @@ class CancelBookingView(APIView):
                 status=status.HTTP_202_ACCEPTED,
             )
 
+
 class Userdetails(APIView):
 
     def get(self, request):
@@ -128,3 +129,20 @@ class Userdetails(APIView):
                 {"message": "Something Went Wrong!"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+
+class GetRideById(APIView):
+
+    def get(self, request, ride_id):
+        try:
+            # Retrieve the ride with the given id
+            ride = Ride.objects.get(id=ride_id)
+        except Ride.DoesNotExist:
+            # Return a 404 response if the ride is not found
+            return Response(
+                {"message": "Ride not found."}, status=status.HTTP_202_ACCEPTED
+            )
+
+        # Serialize the ride data and return it
+        serializer = RideSerializer(ride)
+        return Response(serializer.data, status=status.HTTP_200_OK)

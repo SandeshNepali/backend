@@ -9,5 +9,5 @@ urlpatterns = [
         "booking/<int:pk>/cancel/", CancelBookingView.as_view(), name="cancel-booking"
     ),
     path("user_details/", Userdetails.as_view(), name="user_details"),
-
+    path("get-ride/<int:ride_id>/", GetRideById.as_view(), name="get_ride_by_id"),
 ]
