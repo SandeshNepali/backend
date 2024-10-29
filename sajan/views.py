@@ -16,6 +16,11 @@ class GetRides(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
+
+        # print(request.user)
+
+        # return Response({})
+
         serializer = RideSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(driver=request.user)
@@ -118,10 +123,14 @@ class CancelBookingView(APIView):
 class Userdetails(APIView):
 
     def get(self, request):
+
         try:
             user_id = request.user.id
             user = get_object_or_404(User, id=user_id)
+
+            print(user)
             serializer = UserSerializer(user)
+
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
