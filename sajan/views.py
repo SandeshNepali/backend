@@ -17,9 +17,10 @@ class GetRides(APIView):
 
     def post(self, request):
 
-        # print(request.user)
-
-        # return Response({})
+        if not request.user.groups.filter(name="Rider").exists():
+            return Response(
+                {"detail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
+            )
 
         serializer = RideSerializer(data=request.data)
         if serializer.is_valid():
@@ -154,4 +155,11 @@ class GetRideById(APIView):
 
         # Serialize the ride data and return it
         serializer = RideSerializer(ride)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GetMyRides(APIView):
+    def get(self, request):
+        rides = Ride.objects.filter(driver=request.user)
+        serializer = RideSerializer(rides, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
