@@ -165,7 +165,7 @@ class GetRidesByUserId(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
+# get my booked rides
 class GetMyBookRides(APIView):
     def get(self, request):
         user = request.user
@@ -174,7 +174,27 @@ class GetMyBookRides(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# cancel book ride
+class CancelBookedRide(APIView):
+    def post(self, request, pk):
+        try:
+            booking = Booking.objects.get(pk=pk, passenger=request.user)
 
+            if booking.booking_status == "CANCELED":
+                return Response(
+                    {"message": "Booking is already canceled."},
+                    status=status.HTTP_202_ACCEPTED,
+                )
+
+            booking.booking_status = "CANCELED"
+            booking.save()
+            return Response({"status": "Booking canceled"}, status=status.HTTP_200_OK)
+
+        except Booking.DoesNotExist:
+            return Response(
+                {"message": "Booking not found or you are not authorized"},
+                status=status.HTTP_202_ACCEPTED,
+            )
 
 
 

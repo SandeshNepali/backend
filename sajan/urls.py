@@ -13,6 +13,9 @@ urlpatterns = [
     path("get_booked/", GetBookRides.as_view(), name="get-booked-ride"),
     path("book_ride/", BookRide.as_view(), name="book-ride"),
     path("get_user_ride/", GetMyBookRides.as_view(), name="get-user-ride"),
+    path("book_ride/<int:pk>/cancel/", CancelBookedRide.as_view(), name="cancel-booking"),
+
+
 
 
 
