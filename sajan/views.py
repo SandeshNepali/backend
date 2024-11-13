@@ -7,14 +7,53 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 
-class GetRides(APIView):
+# update the ride from the driver of that ride only
+class UpdateRide(APIView):
 
-    def get(self, request):
-        now = timezone.now()
-        rides = Ride.objects.filter(departure_time__gt=now, status="PENDING")
-        serializer = RideSerializer(rides, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def put(self, request, ride_id):
+        # Check if user is in the 'Rider' group
+        if not request.user.groups.filter(name="Rider").exists():
+            return Response(
+                {"detail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
+            )
 
+        # Retrieve the ride instance or return a 404 if not found
+        ride = get_object_or_404(Ride, id=ride_id, driver=request.user)
+
+        # Partially update the ride with incoming data
+        serializer = RideSerializer(ride, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()  # Save changes to the ride instance
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# delete ride
+class DeleteRide(APIView):
+
+    def delete(self, request, ride_id):
+        # Check if user is in the 'Rider' group
+        if not request.user.groups.filter(name="Rider").exists():
+            return Response(
+                {"detail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Retrieve the ride instance or return a 404 if not found
+        ride = get_object_or_404(Ride, id=ride_id, driver=request.user)
+
+        print(ride)
+
+        # Delete the ride instance
+        ride.delete()
+
+        return Response(
+            {"detail": "Ride deleted successfully."}, status=status.HTTP_200_OK
+        )
+
+
+# driver can create the ride using this api
+class CreateRide(APIView):
     def post(self, request):
 
         if not request.user.groups.filter(name="Rider").exists():
@@ -22,11 +61,152 @@ class GetRides(APIView):
                 {"detail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
             )
 
+        print(request.data)
+
         serializer = RideSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save(driver=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# user details like name
+class Userdetails(APIView):
+
+    def get(self, request):
+
+        try:
+            user_id = request.user.id
+            user = get_object_or_404(User, id=user_id)
+
+            # print(user)
+            serializer = UserSerializer(user)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(
+                {"message": "Something Went Wrong!"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+# get rides
+class GetRides(APIView):
+    def get(self, request):
+        now = timezone.now()
+        rides = Ride.objects.filter(departure_time__gt=now, status="PENDING")
+        serializer = RideSerializer(rides, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# getBook ride of the user
+class GetBookRides(APIView):
+
+    def get(self, request):
+        user = request.user
+        bookings = Booking.objects.filter(passenger=user, booking_status="CONFIRMED")
+        serializer = BookingSerializer(bookings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# book avilable ride
+class BookRide(APIView):
+
+    def post(self, request):
+
+        try:
+            ride = request.data.get("ride")
+
+            existing_booking = Booking.objects.filter(
+                ride=ride, passenger=request.user
+            ).latest("booking_time")
+
+            if existing_booking:
+
+                if existing_booking.booking_status == "CONFIRMED":
+                    return Response(
+                        {"message": "You have already booked this ride."},
+                        status=status.HTTP_202_ACCEPTED,
+                    )
+                else:
+                    existing_booking.booking_status = "CONFIRMED"
+                    existing_booking.save()
+                    return Response(
+                        {"status": "Booking CONFIRMED"}, status=status.HTTP_200_OK
+                    )
+
+        except Booking.DoesNotExist:
+
+            ride_obj = Ride.objects.get(pk=ride)
+
+            if not ride_obj.is_ride_available():
+                return Response(
+                    {"message": "Ride Full !"}, status=status.HTTP_202_ACCEPTED
+                )
+
+            serializer = BookingSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(passenger=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            print(e)
+            return Response(
+                {"message": "something went wrong", "success": "False"},
+                status=status.HTTP_202_ACCEPTED,
+            )
+
+# get the driver ride by driver only
+class GetRidesByUserId(APIView):
+    def get(self, request):
+        rides = Ride.objects.filter(driver=request.user)
+        serializer = RideSerializer(rides, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+class GetMyBookRides(APIView):
+    def get(self, request):
+        user = request.user
+        bookings = Booking.objects.filter(passenger=user, booking_status="CONFIRMED")
+        serializer = BookingSerializerWithRides(bookings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################## old
+
+
+# class GetRides(APIView):
+#     def get(self, request):
+#         now = timezone.now()
+#         rides = Ride.objects.filter(departure_time__gt=now, status="PENDING")
+#         serializer = RideSerializer(rides, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+#     def post(self, request):
+
+#         if not request.user.groups.filter(name="Rider").exists():
+#             return Response(
+#                 {"detail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
+#             )
+
+#         serializer = RideSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(driver=request.user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GetBooking(APIView):
@@ -118,26 +298,6 @@ class CancelBookingView(APIView):
             return Response(
                 {"message": "Booking not found or you are not authorized"},
                 status=status.HTTP_202_ACCEPTED,
-            )
-
-
-class Userdetails(APIView):
-
-    def get(self, request):
-
-        try:
-            user_id = request.user.id
-            user = get_object_or_404(User, id=user_id)
-
-            print(user)
-            serializer = UserSerializer(user)
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            print(e)
-            return Response(
-                {"message": "Something Went Wrong!"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
 

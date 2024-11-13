@@ -22,18 +22,42 @@ class RideSerializer(serializers.ModelSerializer):
             "end_latitude",
             "end_longitude",
             "rider_username",
+            "contact_name",
+            "contact_number"
         ]
+
 
     def get_passengers(self, obj):
         return [passenger.username for passenger in obj.get_confirmed_passengers()]
 
 
-class BookingSerializer(serializers.ModelSerializer):
 
+
+
+
+
+
+
+
+
+
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Booking
         fields = ["id", "passenger", "booking_status", "booking_time", "ride"]
         read_only_fields = ["passenger", "booking_time", "booking_status"]
+
+
+class BookingSerializerWithRides(serializers.ModelSerializer):
+    ride = RideSerializer()
+    class Meta:
+        model = Booking
+        fields = ["ride"]
+
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,7 +65,7 @@ class UserSerializer(serializers.ModelSerializer):
     groups = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ('first_name', 'last_name', 'username', 'groups')
 
     def get_groups(self, obj):
         print(obj.groups.all())
