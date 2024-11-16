@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-aw^+gcpk*s$2a@!y@qqic+na_hq_%-wr3lut*ctre-sut$lp_^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://ucdavisridesharing.vercel.app", "localhost:3000"]
+ALLOWED_HOSTS = ["https://ucdavisridesharing.vercel.app", "localhost"]
 
 # Allow requests from these origins
 CORS_ALLOW_ALL_ORIGINS = True
