@@ -27,7 +27,11 @@ SECRET_KEY = "django-insecure-aw^+gcpk*s$2a@!y@qqic+na_hq_%-wr3lut*ctre-sut$lp_^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://ucdavisridesharing.vercel.app", "localhost"]
+ALLOWED_HOSTS = [
+    "https://ucdavisridesharing.vercel.app",
+    "localhost",
+    "https://sandeshnepali.pythonanywhere.com",
+]
 
 # Allow requests from these origins
 CORS_ALLOW_ALL_ORIGINS = True
@@ -147,8 +151,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # Default primary key field type
