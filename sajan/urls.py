@@ -16,6 +16,10 @@ urlpatterns = [
     path("book_ride/<int:pk>/cancel/", CancelBookedRide.as_view(), name="cancel-booking"),
 
 
+    # creating the user api 
+    path('create_user/', UserCreateAPIView.as_view(), name='user-create'),
+
+
 
 
 
