@@ -244,24 +244,24 @@ class AddUserToRiderGroup(APIView):
 
 
 # class GetRides(APIView):
-    def get(self, request):
-        now = timezone.now()
-        rides = Ride.objects.filter(departure_time__gt=now, status="PENDING")
-        serializer = RideSerializer(rides, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+#     def get(self, request):
+#         now = timezone.now()
+#         rides = Ride.objects.filter(departure_time__gt=now, status="PENDING")
+#         serializer = RideSerializer(rides, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request):
+#     def post(self, request):
 
-        if not request.user.groups.filter(name="Rider").exists():
-            return Response(
-                {"detail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
-            )
+#         if not request.user.groups.filter(name="Rider").exists():
+#             return Response(
+#                 {"detail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
+#             )
 
-        serializer = RideSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(driver=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         serializer = RideSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(driver=request.user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class GetBooking(APIView):

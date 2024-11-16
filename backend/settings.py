@@ -27,10 +27,14 @@ SECRET_KEY = "django-insecure-aw^+gcpk*s$2a@!y@qqic+na_hq_%-wr3lut*ctre-sut$lp_^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# ALLOWED_HOSTS = [
+#     "*"
+# ]
+
 ALLOWED_HOSTS = [
-    "https://ucdavisridesharing.vercel.app",
+    "ucdavisridesharing.vercel.app",
     "localhost",
-    "https://sandeshnepali.pythonanywhere.com",
+    "sandeshnepali.pythonanywhere.com",
 ]
 
 # Allow requests from these origins
