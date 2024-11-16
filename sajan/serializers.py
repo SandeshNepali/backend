@@ -60,7 +60,7 @@ class UserSerializer(serializers.ModelSerializer):
         return [group.name for group in obj.groups.all()]
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)  # Ensure password is write-only
 
     class Meta:

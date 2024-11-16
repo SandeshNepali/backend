@@ -209,13 +209,34 @@ class UserCreateAPIView(APIView):
     authentication_classes = []
 
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# driver application handling
+class AddUserToRiderGroup(APIView):
+
+    def post(self, request):
+        # Get the authenticated user
+        user = request.user
+        
+        # Check if the user exists
+        if not user:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get or create the "Rider" group
+        rider_group, created = Group.objects.get_or_create(name='Rider')
+
+        if rider_group in user.groups.all():
+            return Response({"message": f"User {user.username} is already in the Rider group"}, status=status.HTTP_200_OK)
+
+        # Add the user to the "Rider" group
+        user.groups.add(rider_group)
+
+        return Response({"message": f"User {user.username} added to Rider group"}, status=status.HTTP_200_OK)
 
 
 

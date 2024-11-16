@@ -19,6 +19,10 @@ urlpatterns = [
     # creating the user api 
     path('create_user/', UserCreateAPIView.as_view(), name='user-create'),
 
+    # adding user to rider list
+    path('driver/', AddUserToRiderGroup.as_view(), name='add_authenticated_user_to_rider'),
+
+
 
 
 
