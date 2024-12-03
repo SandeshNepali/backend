@@ -75,13 +75,13 @@ class Ride(models.Model):
         self.bookings.update(booking_status="TERMINATED")
         self.save()
 
-    @property
-    def rider_username(self):
-        return self.driver.username
+    # @property
+    # def rider_username(self):
+    #     return self.driver.username
 
-    @property
-    def rider_fullname(self):
-        return f"{self.driver.first_name} {self.driver.last_name}"
+    # @property
+    # def rider_fullname(self):
+    #     return f"{self.driver.first_name} {self.driver.last_name}"
 
 
 class Booking(models.Model):

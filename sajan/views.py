@@ -5,6 +5,21 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from rest_framework.filters import SearchFilter
+from rest_framework.generics import ListAPIView
+
+
+# search functionality
+class SearchRides(ListAPIView):
+    queryset = Ride.objects.all()
+    serializer_class = RideSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ["start_location", "end_location"]
+
+    def get_queryset(self):
+        # Filter only pending rides with future departure times
+        now = timezone.now()
+        return super().get_queryset().filter(departure_time__gt=now, status="PENDING")
 
 
 # update the ride from the driver of that ride only

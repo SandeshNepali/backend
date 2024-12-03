@@ -22,6 +22,9 @@ urlpatterns = [
     # adding user to rider list
     path('driver/', AddUserToRiderGroup.as_view(), name='add_authenticated_user_to_rider'),
 
+    # search ride
+    path("search-rides/", SearchRides.as_view(), name="search-rides"),
+
 
 
 
