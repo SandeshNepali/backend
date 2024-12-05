@@ -8,5 +8,3 @@ urlpatterns = [
     path("", include("security.urls")),
     path("api/", include("sajan.urls")),
 ]
-
-static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,15 +27,15 @@ SECRET_KEY = "django-insecure-aw^+gcpk*s$2a@!y@qqic+na_hq_%-wr3lut*ctre-sut$lp_^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = [
-#     "*"
-# ]
 
-ALLOWED_HOSTS = [
-    "ucdavisridesharing.vercel.app",
-    "localhost",
-    "sandeshnepali.pythonanywhere.com",
-]
+ALLOWED_HOSTS = ["*"]
+
+# ALLOWED_HOSTS = [
+#     "ucdavisridesharing.vercel.app",
+#     "localhost",
+#     "sandeshnepali.pythonanywhere.com",
+#     ".vercel.app"
+# ]
 
 # Allow requests from these origins
 CORS_ALLOW_ALL_ORIGINS = True
@@ -161,7 +161,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 
 # Default primary key field type

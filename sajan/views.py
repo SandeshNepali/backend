@@ -110,6 +110,8 @@ class Userdetails(APIView):
 # get rides
 class GetRides(APIView):
     def get(self, request):
+        # print("get calld")
+
         now = timezone.now()
         rides = Ride.objects.filter(departure_time__gt=now, status="PENDING")
         serializer = RideSerializer(rides, many=True)
@@ -124,6 +126,7 @@ class GetBookRides(APIView):
         bookings = Booking.objects.filter(passenger=user, booking_status="CONFIRMED")
         serializer = BookingSerializer(bookings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 # book avilable ride
 class BookRide(APIView):
@@ -172,6 +175,7 @@ class BookRide(APIView):
                 status=status.HTTP_202_ACCEPTED,
             )
 
+
 # get the driver ride by driver only
 class GetRidesByUserId(APIView):
     def get(self, request):
@@ -212,11 +216,10 @@ class CancelBookedRide(APIView):
             )
 
 
-
-
-# creating the user 
+# creating the user
 
 from rest_framework.permissions import AllowAny
+
 
 class UserCreateAPIView(APIView):
 
@@ -237,22 +240,29 @@ class AddUserToRiderGroup(APIView):
     def post(self, request):
         # Get the authenticated user
         user = request.user
-        
+
         # Check if the user exists
         if not user:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         # Get or create the "Rider" group
-        rider_group, created = Group.objects.get_or_create(name='Rider')
+        rider_group, created = Group.objects.get_or_create(name="Rider")
 
         if rider_group in user.groups.all():
-            return Response({"message": f"User {user.username} is already registered as rider"}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": f"User {user.username} is already registered as rider"},
+                status=status.HTTP_200_OK,
+            )
 
         # Add the user to the "Rider" group
         user.groups.add(rider_group)
 
-        return Response({"message": f"User {user.username} is now registered as rider"}, status=status.HTTP_200_OK)
-
+        return Response(
+            {"message": f"User {user.username} is now registered as rider"},
+            status=status.HTTP_200_OK,
+        )
 
 
 ################################## old
