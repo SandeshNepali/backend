@@ -1,3 +1,7 @@
 # Ignore virtual environment folder
 my_env/
 static/
+
+
+
+# git rm -r --cached .
