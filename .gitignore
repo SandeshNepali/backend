@@ -8,5 +8,5 @@
 db.sqlite3
 
 # Virtual environment
-my_env/
+my_env
 
